@@ -10,7 +10,9 @@
     "ecs",
     "ui"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "com.xcrew.morpeh" : "2020.4.28"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/X-Crew/Morpeh.UI"
