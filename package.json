@@ -4,14 +4,14 @@
   "displayName": "Morpeh.UI",
   "description": "UI Framework for Morpeh ECS",
   "unity": "2019.1",
-  "version": "2020.1.2",
+  "version": "2020.1.3",
   "keywords": [
     "morpeh",
     "ecs",
     "ui"
   ],
   "dependencies": {
-    "com.xcrew.morpeh": "2020.4.30"
+    "com.xcrew.morpeh": "2020.4.31"
   },
   "repository": {
     "type": "git",
