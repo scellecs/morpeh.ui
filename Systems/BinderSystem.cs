@@ -7,13 +7,12 @@ using TMPro;
 using Unity.IL2CPP.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
-using Morpeh.DirtyDataEditor;
 
 [Il2CppSetOption(Option.NullChecks, false)]
 [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
 [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 [CreateAssetMenu(menuName = "ECS/Systems/" + nameof(CustomBinderSystem))]
-public sealed class CustomBinderSystem : UpdateSystem {
+public sealed class BinderSystem : UpdateSystem {
     private Filter filter;
     private Filter filterInitialization;
 
