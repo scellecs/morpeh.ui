@@ -3,6 +3,6 @@
     using UnityEngine.UI;
 
     [AddComponentMenu("Morpeh/Base Components/UI/Button Provider")]
-    public class ButtonProvider : BaseComponentProvider<Button, ButtonComponent> {
+    public class ButtonProvider : ComponentProvider<Button, ButtonComponent> {
     }
 }

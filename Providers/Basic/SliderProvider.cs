@@ -4,6 +4,6 @@
     using UnityEngine.UI;
 
     [AddComponentMenu("Morpeh/Base Components/UI/Slider Provider")]
-    public class SliderProvider : BaseComponentProvider<Slider, SliderComponent> {
+    public class SliderProvider : ComponentProvider<Slider, SliderComponent> {
     }
 }

@@ -4,7 +4,7 @@
     using UnityEngine.UI;
 
     [AddComponentMenu("Morpeh/Base Components/UI/Raw Image Provider")]
-    public class RawImageProvider : BaseComponentProvider<RawImage, RawImageComponent>
+    public class RawImageProvider : ComponentProvider<RawImage, RawImageComponent>
     {
     }
 }

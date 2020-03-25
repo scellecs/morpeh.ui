@@ -3,6 +3,6 @@
     using UnityEngine.UI;
 
     [AddComponentMenu("Morpeh/Base Components/UI/Image Provider")]
-    public class ImageProvider : BaseComponentProvider<Image, ImageComponent> {
+    public class ImageProvider : ComponentProvider<Image, ImageComponent> {
     }
 }

@@ -3,6 +3,6 @@
     using UnityEngine.UI;
 
     [AddComponentMenu("Morpeh/Base Components/UI/Mask Provider")]
-    public class MaskProvider : BaseComponentProvider<Mask, MaskComponent> {
+    public class MaskProvider : ComponentProvider<Mask, MaskComponent> {
     }
 }

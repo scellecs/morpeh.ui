@@ -3,6 +3,6 @@
     using UnityEngine.UI;
 
     [AddComponentMenu("Morpeh/Base Components/UI/InputField Provider")]
-    public class InputFieldProvider : BaseComponentProvider<InputField, InputFieldComponent> {
+    public class InputFieldProvider : ComponentProvider<InputField, InputFieldComponent> {
     }
 }

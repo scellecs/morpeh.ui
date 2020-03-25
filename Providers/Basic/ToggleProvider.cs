@@ -3,6 +3,6 @@
     using UnityEngine.UI;
 
     [AddComponentMenu("Morpeh/Base Components/UI/Toggle Provider")]
-    public class ToggleProvider : BaseComponentProvider<Toggle, ToggleComponent> {
+    public class ToggleProvider : ComponentProvider<Toggle, ToggleComponent> {
     }
 }

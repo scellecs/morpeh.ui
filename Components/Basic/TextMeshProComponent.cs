@@ -1,5 +1,4 @@
 ﻿namespace Morpeh {
-#if TMPro
     using UnityEngine;
     using TMPro;
 
@@ -12,5 +11,4 @@
             set { this.Text = value; }
         }
     }
-#endif
 }
