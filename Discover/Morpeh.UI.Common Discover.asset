@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0dca1f0dde868a4aa93821382b07f95, type: 3}
+  m_Name: Morpeh.UI.Common Discover
+  m_EditorClassIdentifier: 
+  Name: Common
+  Category: Morpeh.UI
+  DefaultSelected: 0
+  image: {fileID: 0}
+  Description: UI Module includes Windows, Binders and Base UI Providers.
+  Priority: 0
+  Sections:
+  - SectionName: Installer
+    image: {fileID: 0}
+    SectionContent: Add to your scene this installer for UI functionality
+    Actions:
+    - Description: Installer Prefab
+      Target: {fileID: 7151803318661546750, guid: b414f4624fa30e14f9eaeedd00f7c4f6,
+        type: 3}
+  - SectionName: Windows
+    image: {fileID: 0}
+    SectionContent: 'Window is abstraction for UI.
+
+      It can be opened or closed.'
+    Actions:
+    - Description: Add Window Component to your UI GameObject
+      Target: {fileID: 11500000, guid: ed2945b128369724a8110ab53c38c304, type: 3}
+  - SectionName: Binders
+    image: {fileID: 0}
+    SectionContent: "It is one-way or two-way binders depends on type of component.\nSupported
+      components:\n\u2022 Text\n\u2022 TextMeshProUGUI\n\u2022 Sliders"
+    Actions:
+    - Description: Add Binder Component to your UI GameObject
+      Target: {fileID: 11500000, guid: 5c4d46c6822cfc8458f042f34719917c, type: 3}
