@@ -4,15 +4,16 @@ using Morpeh;
 using Morpeh.Globals;
 using Morpeh.UI.Components;
 using TMPro;
-using UnityEngine;
 using Unity.IL2CPP.CompilerServices;
+using UnityEngine;
 using UnityEngine.UI;
+using Morpeh.DirtyDataEditor;
 
 [Il2CppSetOption(Option.NullChecks, false)]
 [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
 [Il2CppSetOption(Option.DivideByZeroChecks, false)]
-[CreateAssetMenu(menuName = "ECS/Systems/" + nameof(BinderSystem))]
-public sealed class BinderSystem : UpdateSystem {
+[CreateAssetMenu(menuName = "ECS/Systems/" + nameof(CustomBinderSystem))]
+public sealed class CustomBinderSystem : UpdateSystem {
     private Filter filter;
     private Filter filterInitialization;
 
@@ -46,6 +47,8 @@ public sealed class BinderSystem : UpdateSystem {
                     return globalVariableInt.BatchedChanges.Peek().ToString(CultureInfo.InvariantCulture);
                 case GlobalVariableString globalVariableString:
                     return globalVariableString.BatchedChanges.Peek();
+                case GlobalVariableBigNumber globalVariableBigNumber:
+                    return globalVariableBigNumber.BatchedChanges.Peek().ToString();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(bg));
             }
@@ -60,6 +63,8 @@ public sealed class BinderSystem : UpdateSystem {
                     return globalVariableInt.Value.ToString(CultureInfo.InvariantCulture);
                 case GlobalVariableString globalVariableString:
                     return globalVariableString.Value;
+                case GlobalVariableBigNumber globalVariableBigNumber:
+                    return globalVariableBigNumber.Value.ToString();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(bg));
             }
@@ -116,7 +121,7 @@ public sealed class BinderSystem : UpdateSystem {
             }
             entity.AddComponent<BinderInitializedMarker>();
         }
-        
+    
         foreach (var entity in this.filter) {
             ref var binder = ref entity.GetComponent<BinderComponent>();
             if (binder.source.IsPublished) {
