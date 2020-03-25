@@ -1,15 +1,14 @@
-﻿namespace Morpeh {
-    using UnityEngine;
+﻿namespace Morpeh.UI.Components {
+    using System;
     using UnityEngine.UI;
-    
 
-    [System.Serializable]
+    [Serializable]
     public struct ScrollRectComponent : IMonoComponent<ScrollRect> {
         public ScrollRect ScrollRect;
 
         public ScrollRect monoComponent {
-            get { return this.ScrollRect; }
-            set { this.ScrollRect = value; }
+            get => this.ScrollRect;
+            set => this.ScrollRect = value;
         }
     }
 }

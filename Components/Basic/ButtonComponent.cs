@@ -1,14 +1,14 @@
-﻿namespace Morpeh {
-    using UnityEngine;
+﻿namespace Morpeh.UI.Components {
+    using System;
     using UnityEngine.UI;
 
-    [System.Serializable]
+    [Serializable]
     public struct ButtonComponent : IMonoComponent<Button> {
         public Button Button;
 
         public Button monoComponent {
-            get { return this.Button; }
-            set { this.Button = value; }
+            get => this.Button;
+            set => this.Button = value;
         }
     }
 }

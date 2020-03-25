@@ -1,17 +1,14 @@
-﻿namespace Morpeh
-{
-    using UnityEngine;
+﻿namespace Morpeh.UI.Components {
+    using System;
     using UnityEngine.UI;
 
-    [System.Serializable]
-    public struct MaskComponent : IMonoComponent<Mask>
-    {
+    [Serializable]
+    public struct MaskComponent : IMonoComponent<Mask> {
         public Mask Mask;
 
-        public Mask monoComponent
-        {
-            get { return this.Mask; }
-            set { this.Mask = value; }
+        public Mask monoComponent {
+            get => this.Mask;
+            set => this.Mask = value;
         }
     }
 }
