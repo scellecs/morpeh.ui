@@ -11,7 +11,7 @@ using UnityEngine.UI;
 [Il2CppSetOption(Option.NullChecks, false)]
 [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
 [Il2CppSetOption(Option.DivideByZeroChecks, false)]
-[CreateAssetMenu(menuName = "ECS/Systems/" + nameof(CustomBinderSystem))]
+[CreateAssetMenu(menuName = "ECS/Systems/" + nameof(BinderSystem))]
 public sealed class BinderSystem : UpdateSystem {
     private Filter filter;
     private Filter filterInitialization;
