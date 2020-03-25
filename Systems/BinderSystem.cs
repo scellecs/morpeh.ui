@@ -4,8 +4,8 @@ using Morpeh;
 using Morpeh.Globals;
 using Morpeh.UI.Components;
 using TMPro;
-using UnityEngine;
 using Unity.IL2CPP.CompilerServices;
+using UnityEngine;
 using UnityEngine.UI;
 
 [Il2CppSetOption(Option.NullChecks, false)]
@@ -46,6 +46,8 @@ public sealed class BinderSystem : UpdateSystem {
                     return globalVariableInt.BatchedChanges.Peek().ToString(CultureInfo.InvariantCulture);
                 case GlobalVariableString globalVariableString:
                     return globalVariableString.BatchedChanges.Peek();
+                case GlobalVariableBigNumber globalVariableBigNumber:
+                    return globalVariableBigNumber.BatchedChanges.Peek().ToString();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(bg));
             }
@@ -60,6 +62,8 @@ public sealed class BinderSystem : UpdateSystem {
                     return globalVariableInt.Value.ToString(CultureInfo.InvariantCulture);
                 case GlobalVariableString globalVariableString:
                     return globalVariableString.Value;
+                case GlobalVariableBigNumber globalVariableBigNumber:
+                    return globalVariableBigNumber.Value.ToString();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(bg));
             }
@@ -116,7 +120,7 @@ public sealed class BinderSystem : UpdateSystem {
             }
             entity.AddComponent<BinderInitializedMarker>();
         }
-        
+    
         foreach (var entity in this.filter) {
             ref var binder = ref entity.GetComponent<BinderComponent>();
             if (binder.source.IsPublished) {
