@@ -1,16 +1,14 @@
-﻿namespace Morpeh
-{
+﻿namespace Morpeh.UI.Components {
+    using System;
     using UnityEngine.UI;
 
-    [System.Serializable]
-    public struct ImageComponent : IMonoComponent<Image>
-    {
+    [Serializable]
+    public struct ImageComponent : IMonoComponent<Image> {
         public Image Image;
 
-        public Image monoComponent
-        {
-            get { return this.Image; }
-            set { this.Image = value; }
+        public Image monoComponent {
+            get => this.Image;
+            set => this.Image = value;
         }
     }
 }

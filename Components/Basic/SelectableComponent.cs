@@ -1,14 +1,14 @@
-﻿namespace Morpeh {
-    using UnityEngine;
+﻿namespace Morpeh.UI.Components {
+    using System;
     using UnityEngine.UI;
 
-    [System.Serializable]
+    [Serializable]
     public struct SelectableComponent : IMonoComponent<Selectable> {
         public Selectable Selectable;
 
         public Selectable monoComponent {
-            get { return this.Selectable; }
-            set { this.Selectable = value; }
+            get => this.Selectable;
+            set => this.Selectable = value;
         }
     }
 }

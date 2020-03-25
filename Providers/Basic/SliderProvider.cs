@@ -1,5 +1,6 @@
-﻿namespace Morpeh
+﻿namespace Morpeh.UI.Providers
 {
+    using Components;
     using UnityEngine;
     using UnityEngine.UI;
 

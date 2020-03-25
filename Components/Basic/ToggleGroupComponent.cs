@@ -1,14 +1,14 @@
-﻿namespace Morpeh {
-    using UnityEngine;
+﻿namespace Morpeh.UI.Components {
+    using System;
     using UnityEngine.UI;
 
-    [System.Serializable]
+    [Serializable]
     public struct ToggleGroupComponent : IMonoComponent<ToggleGroup> {
         public ToggleGroup ToggleGroup;
 
         public ToggleGroup monoComponent {
-            get { return this.ToggleGroup; }
-            set { this.ToggleGroup = value; }
+            get => this.ToggleGroup;
+            set => this.ToggleGroup = value;
         }
     }
 }

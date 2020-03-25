@@ -1,14 +1,14 @@
-﻿namespace Morpeh {
-    using UnityEngine;
+﻿namespace Morpeh.UI.Components {
+    using System;
     using UnityEngine.UI;
 
-    [System.Serializable]
+    [Serializable]
     public struct SliderComponent : IMonoComponent<Slider> {
         public Slider Slider;
 
         public Slider monoComponent {
-            get { return this.Slider; }
-            set { this.Slider = value; }
+            get => this.Slider;
+            set => this.Slider = value;
         }
     }
 }

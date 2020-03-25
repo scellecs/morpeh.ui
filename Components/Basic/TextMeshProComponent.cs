@@ -1,14 +1,14 @@
-﻿namespace Morpeh {
-    using UnityEngine;
+﻿namespace Morpeh.UI.Components {
+    using System;
     using TMPro;
 
-    [System.Serializable]
+    [Serializable]
     public struct TextMeshProComponent : IMonoComponent<TextMeshProUGUI> {
         public TextMeshProUGUI Text;
 
         public TextMeshProUGUI monoComponent {
-            get { return this.Text; }
-            set { this.Text = value; }
+            get => this.Text;
+            set => this.Text = value;
         }
     }
 }
