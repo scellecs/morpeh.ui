@@ -11,19 +11,23 @@ using UnityEngine.UI;
 [Il2CppSetOption(Option.DivideByZeroChecks, false)]
 [HideMonoScript]
 public sealed class Binder : MonoProvider<BinderComponent> {
-    private void OnValidate() {
-        ref var data = ref this.GetData();
-        if (data.target != null) {
-            return;
-        }
-        data.target = this.GetComponent<Text>();
-        if (data.target != null) {
-            return;
-        }
-        data.target = this.GetComponent<TextMeshProUGUI>();
-        if (data.target != null) {
-            return;
-        }
-        data.target = this.GetComponent<Slider>();
-    }
+	private void OnValidate() {
+		ref var data = ref this.GetData();
+		if (data.target != null) {
+			return;
+		}
+		data.target = this.GetComponent<Text>();
+		if (data.target != null) {
+			return;
+		}
+		data.target = this.GetComponent<TextMeshProUGUI>();
+		if (data.target != null) {
+			return;
+		}
+		data.target = this.GetComponent<Slider>();
+		if (data.target != null) {
+			return;
+		}
+		data.target = this.GetComponent<Image>();
+	}
 }
