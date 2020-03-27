@@ -4,8 +4,8 @@ using Morpeh;
 using Morpeh.Globals;
 using Morpeh.UI.Components;
 using TMPro;
-using UnityEngine;
 using Unity.IL2CPP.CompilerServices;
+using UnityEngine;
 using UnityEngine.UI;
 
 [Il2CppSetOption(Option.NullChecks, false)]
@@ -46,6 +46,8 @@ public sealed class BinderSystem : UpdateSystem {
                     return globalVariableInt.BatchedChanges.Peek().ToString(CultureInfo.InvariantCulture);
                 case GlobalVariableString globalVariableString:
                     return globalVariableString.BatchedChanges.Peek();
+                case GlobalVariableBigNumber globalVariableBigNumber:
+                    return globalVariableBigNumber.BatchedChanges.Peek().ToString();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(bg));
             }
@@ -60,6 +62,26 @@ public sealed class BinderSystem : UpdateSystem {
                     return globalVariableInt.Value.ToString(CultureInfo.InvariantCulture);
                 case GlobalVariableString globalVariableString:
                     return globalVariableString.Value;
+                case GlobalVariableBigNumber globalVariableBigNumber:
+                    return globalVariableBigNumber.Value.ToString();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(bg));
+            }
+        }
+        
+        Sprite GetLastSprite(BaseGlobal bg) {
+            switch (bg) {
+                case GlobalEventObject globalEventObject:
+                    return (Sprite)globalEventObject.BatchedChanges.Peek();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(bg));
+            }
+        }
+
+        Sprite GetLastSpriteValue(BaseGlobal bg) {
+            switch (bg) {
+                case GlobalVariableObject globalVariableObject:
+                    return (Sprite)globalVariableObject.Value;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(bg));
             }
@@ -81,7 +103,6 @@ public sealed class BinderSystem : UpdateSystem {
                     return globalVariableInt.BatchedChanges.Peek();
                 case GlobalVariableString globalVariableString:
                     return float.Parse(globalVariableString.BatchedChanges.Peek(), CultureInfo.InvariantCulture);
-                    ;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(bg));
             }
@@ -111,12 +132,20 @@ public sealed class BinderSystem : UpdateSystem {
                 case Slider slider:
                     slider.value = GetLastFloatValue(binder.source);
                     break;
+                case Image image:
+                    if (binder.source.GetType() == typeof(GlobalVariableObject)) {
+                        image.sprite = GetLastSpriteValue(binder.source);
+                    }
+                    else {
+                        image.fillAmount = GetLastFloatValue(binder.source);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(binder.target));
             }
             entity.AddComponent<BinderInitializedMarker>();
         }
-        
+    
         foreach (var entity in this.filter) {
             ref var binder = ref entity.GetComponent<BinderComponent>();
             if (binder.source.IsPublished) {
@@ -129,6 +158,14 @@ public sealed class BinderSystem : UpdateSystem {
                         break;
                     case Slider slider:
                         slider.value = GetLastFloat(binder.source);
+                        break;
+                    case Image image:
+                        if (binder.source.GetType() == typeof(GlobalEventObject)) {
+                            image.sprite = GetLastSprite(binder.source);
+                        }
+                        else {
+                            image.fillAmount = GetLastFloat(binder.source);
+                        }
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(binder.target));
