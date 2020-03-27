@@ -68,6 +68,15 @@ public sealed class BinderSystem : UpdateSystem {
                     throw new ArgumentOutOfRangeException(nameof(bg));
             }
         }
+        
+        Sprite GetLastSprite(BaseGlobal bg) {
+            switch (bg) {
+                case GlobalEventObject globalEventObject:
+                    return (Sprite)globalEventObject.BatchedChanges.Peek();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(bg));
+            }
+        }
 
         Sprite GetLastSpriteValue(BaseGlobal bg) {
             switch (bg) {
@@ -151,7 +160,12 @@ public sealed class BinderSystem : UpdateSystem {
                         slider.value = GetLastFloat(binder.source);
                         break;
                     case Image image:
-                        image.fillAmount = GetLastFloat(binder.source);
+                        if (binder.source.GetType() == typeof(GlobalEventObject)) {
+                            image.sprite = GetLastSprite(binder.source);
+                        }
+                        else {
+                            image.fillAmount = GetLastFloat(binder.source);
+                        }
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(binder.target));
