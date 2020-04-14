@@ -11,7 +11,7 @@
     "ui"
   ],
   "dependencies": {
-    "com.xcrew.morpeh": "2020.5.1"
+    "com.xcrew.morpeh": "ssh://git@github.com:X-Crew/Morpeh.git#develop"
   },
   "repository": {
     "type": "git",
