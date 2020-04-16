@@ -141,7 +141,8 @@ public sealed class BinderSystem : UpdateSystem {
                         var newValue = GetLastFloatValue(binder.source);
                         var currentValue = image.fillAmount;
 
-                        if (newValue - currentValue < .1f)
+                        var delta = newValue - currentValue;
+                        if (delta < .1f && delta > 0.0f)
                         {
                             image.fillAmount = newValue;
                         }
@@ -177,12 +178,12 @@ public sealed class BinderSystem : UpdateSystem {
                         if (binder.source.GetType() == typeof(GlobalEventObject)) {
                             image.sprite = GetLastSprite(binder.source);
                         }
-                        else
-                        {
+                        else {
                             var newValue = GetLastFloat(binder.source);
                             var currentValue = image.fillAmount;
 
-                            if (newValue - currentValue < .1f)
+                            var delta = newValue - currentValue;
+                            if (delta < .1f && delta > 0.0f)
                             {
                                 image.fillAmount = newValue;
                             }
