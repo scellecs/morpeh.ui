@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using DG.Tweening;
 using Morpeh;
 using Morpeh.Globals;
 using Morpeh.UI.Components;
@@ -137,7 +138,13 @@ public sealed class BinderSystem : UpdateSystem {
                         image.sprite = GetLastSpriteValue(binder.source);
                     }
                     else {
-                        image.fillAmount = GetLastFloatValue(binder.source);
+                        var newValue = GetLastFloatValue(binder.source);
+                        var currentValue = image.fillAmount;
+
+                        if (currentValue > newValue)
+                            image.DOFillAmount(1, 0.5f).OnComplete(() => image.fillAmount = 0);
+                        else
+                            image.DOFillAmount(newValue, 0.5f);
                     }
                     break;
                 default:
@@ -163,8 +170,15 @@ public sealed class BinderSystem : UpdateSystem {
                         if (binder.source.GetType() == typeof(GlobalEventObject)) {
                             image.sprite = GetLastSprite(binder.source);
                         }
-                        else {
-                            image.fillAmount = GetLastFloat(binder.source);
+                        else
+                        {
+                            var newValue = GetLastFloat(binder.source);
+                            var currentValue = image.fillAmount;
+
+                            if (currentValue > newValue)
+                                image.DOFillAmount(1, 0.5f).OnComplete(() => image.fillAmount = 0);
+                            else
+                                image.DOFillAmount(newValue, 0.5f);
                         }
                         break;
                     default:
