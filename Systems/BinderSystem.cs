@@ -141,10 +141,17 @@ public sealed class BinderSystem : UpdateSystem {
                         var newValue = GetLastFloatValue(binder.source);
                         var currentValue = image.fillAmount;
 
-                        if (currentValue > newValue)
-                            image.DOFillAmount(1, 0.5f).OnComplete(() => image.fillAmount = 0);
+                        if (newValue - currentValue < .1f)
+                        {
+                            image.fillAmount = newValue;
+                        }
                         else
-                            image.DOFillAmount(newValue, 0.5f);
+                        {
+                            if (currentValue > newValue)
+                                image.DOFillAmount(1, 0.5f).OnComplete(() => image.fillAmount = 0);
+                            else
+                                image.DOFillAmount(newValue, 0.5f);
+                        }
                     }
                     break;
                 default:
@@ -175,10 +182,17 @@ public sealed class BinderSystem : UpdateSystem {
                             var newValue = GetLastFloat(binder.source);
                             var currentValue = image.fillAmount;
 
-                            if (currentValue > newValue)
-                                image.DOFillAmount(1, 0.5f).OnComplete(() => image.fillAmount = 0);
+                            if (newValue - currentValue < .1f)
+                            {
+                                image.fillAmount = newValue;
+                            }
                             else
-                                image.DOFillAmount(newValue, 0.5f);
+                            {
+                                if (currentValue > newValue)
+                                    image.DOFillAmount(1, 0.5f).OnComplete(() => image.fillAmount = 0);
+                                else
+                                    image.DOFillAmount(newValue, 0.5f);
+                            }
                         }
                         break;
                     default:
