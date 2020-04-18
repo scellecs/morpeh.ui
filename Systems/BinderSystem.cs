@@ -68,6 +68,24 @@ public sealed class BinderSystem : UpdateSystem {
                     throw new ArgumentOutOfRangeException(nameof(bg));
             }
         }
+        
+        Sprite GetLastSprite(BaseGlobal bg) {
+            switch (bg) {
+                case GlobalEventObject globalEventObject:
+                    return (Sprite)globalEventObject.BatchedChanges.Peek();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(bg));
+            }
+        }
+
+        Sprite GetLastSpriteValue(BaseGlobal bg) {
+            switch (bg) {
+                case GlobalVariableObject globalVariableObject:
+                    return (Sprite)globalVariableObject.Value;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(bg));
+            }
+        }
 
         float GetLastFloat(BaseGlobal bg) {
             switch (bg) {
@@ -85,7 +103,6 @@ public sealed class BinderSystem : UpdateSystem {
                     return globalVariableInt.BatchedChanges.Peek();
                 case GlobalVariableString globalVariableString:
                     return float.Parse(globalVariableString.BatchedChanges.Peek(), CultureInfo.InvariantCulture);
-                    ;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(bg));
             }
@@ -107,13 +124,36 @@ public sealed class BinderSystem : UpdateSystem {
             ref var binder = ref entity.GetComponent<BinderComponent>();
             switch (binder.target) {
                 case TextMeshProUGUI textTMP:
-                    textTMP.text = GetLastStringValue(binder.source);
+                    this.World.CreateEntity().SetComponent( new UpdateTextMeshProUGUIComponent {
+                        tmp = textTMP,
+                        value = GetLastStringValue(binder.source)
+                    });
                     break;
                 case Text simpleText:
-                    simpleText.text = GetLastStringValue(binder.source);
+                    this.World.CreateEntity().SetComponent( new UpdateTextComponent {
+                        text = simpleText,
+                        value = GetLastStringValue(binder.source)
+                    });
                     break;
                 case Slider slider:
-                    slider.value = GetLastFloatValue(binder.source);
+                    this.World.CreateEntity().SetComponent( new UpdateSliderComponent {
+                        slider = slider,
+                        value = GetLastFloatValue(binder.source)
+                    });
+                    break;
+                case Image image:
+                    if (binder.source.GetType() == typeof(GlobalVariableObject)) {
+                        this.World.CreateEntity().SetComponent( new UpdateImageComponent {
+                            image = image,
+                            value = GetLastSpriteValue(binder.source)
+                        });
+                    }
+                    else {
+                        this.World.CreateEntity().SetComponent( new UpdateImageFillAmountComponent {
+                            image = image,
+                            value = GetLastFloatValue(binder.source)
+                        });
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(binder.target));
@@ -126,13 +166,36 @@ public sealed class BinderSystem : UpdateSystem {
             if (binder.source.IsPublished) {
                 switch (binder.target) {
                     case TextMeshProUGUI textTMP:
-                        textTMP.text = GetLastString(binder.source);
+                        this.World.CreateEntity().SetComponent( new UpdateTextMeshProUGUIComponent {
+                            tmp = textTMP,
+                            value = GetLastString(binder.source)
+                        });
                         break;
                     case Text simpleText:
-                        simpleText.text = GetLastString(binder.source);
+                        this.World.CreateEntity().SetComponent( new UpdateTextComponent {
+                            text = simpleText,
+                            value = GetLastString(binder.source)
+                        });
                         break;
                     case Slider slider:
-                        slider.value = GetLastFloat(binder.source);
+                        this.World.CreateEntity().SetComponent( new UpdateSliderComponent {
+                            slider = slider,
+                            value = GetLastFloat(binder.source)
+                        });
+                        break;
+                    case Image image:
+                        if (binder.source.GetType() == typeof(GlobalEventObject)) {
+                            this.World.CreateEntity().SetComponent( new UpdateImageComponent {
+                                image = image,
+                                value = GetLastSprite(binder.source)
+                            });
+                        }
+                        else {
+                            this.World.CreateEntity().SetComponent( new UpdateImageFillAmountComponent {
+                                image = image,
+                                value = GetLastFloat(binder.source)
+                            });
+                        }
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(binder.target));
