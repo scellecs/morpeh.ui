@@ -19,6 +19,7 @@
             {
                 ref var component = ref entity.GetComponent<UpdateTextComponent>();
                 component.text.text = component.value;
+                entity.RemoveComponent<UpdateTextComponent>();
             }
         }
     }

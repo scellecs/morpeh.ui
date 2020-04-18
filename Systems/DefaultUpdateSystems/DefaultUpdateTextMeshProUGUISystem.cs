@@ -19,6 +19,7 @@
             {
                 ref var component = ref entity.GetComponent<UpdateTextMeshProUGUIComponent>();
                 component.tmp.text = component.value;
+                entity.RemoveComponent<UpdateTextMeshProUGUIComponent>();
             }
         }
     }

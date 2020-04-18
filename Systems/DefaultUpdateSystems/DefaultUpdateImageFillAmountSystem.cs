@@ -19,6 +19,7 @@
             {
                 ref var component = ref entity.GetComponent<UpdateImageFillAmountComponent>();
                 component.image.fillAmount = component.value;
+                entity.RemoveComponent<UpdateImageFillAmountComponent>();
             }
         }
     }

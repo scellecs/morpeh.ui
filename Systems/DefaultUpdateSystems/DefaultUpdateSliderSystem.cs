@@ -19,6 +19,7 @@
             {
                 ref var component = ref entity.GetComponent<UpdateSliderComponent>();
                 component.slider.value = component.value;
+                entity.RemoveComponent<UpdateSliderComponent>();
             }
         }
     }

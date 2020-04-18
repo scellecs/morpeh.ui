@@ -19,6 +19,7 @@
             {
                 ref var component = ref entity.GetComponent<UpdateImageComponent>();
                 component.image.sprite = component.value;
+                entity.RemoveComponent<UpdateImageComponent>();
             }
         }
     }
