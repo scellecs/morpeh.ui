@@ -152,7 +152,7 @@ public sealed class BinderSystem : UpdateSystem {
             ref var ts  = ref toStringBag.GetComponent(i);
             ref var tmp = ref sliderBag.GetComponent(i);
 
-            tmp.monoComponent.value = float.Parse(ts.LastToString());
+            tmp.monoComponent.value = float.Parse(ts.LastToString(), CultureInfo.InvariantCulture);
         }
         
         toStringBag = this.filterImageFillAmount.Select<GlobalEventLastToString>();
@@ -162,7 +162,7 @@ public sealed class BinderSystem : UpdateSystem {
             ref var ts  = ref toStringBag.GetComponent(i);
             ref var tmp = ref imageBag.GetComponent(i);
 
-            tmp.monoComponent.fillAmount = float.Parse(ts.LastToString());
+            tmp.monoComponent.fillAmount = float.Parse(ts.LastToString(), CultureInfo.InvariantCulture);
         }
         
         var spriteBag = this.filterImage.Select<GlobalEventComponent<Object>>();
