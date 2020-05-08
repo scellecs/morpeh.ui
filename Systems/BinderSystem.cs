@@ -63,8 +63,6 @@ public sealed class BinderSystem : UpdateSystem {
             var source = binder.source;
             var target = binder.target;
             
-            
-
             var sourceEntity = binder.source.Entity;
             switch (target) {
                 case TextMeshProUGUI textTMP:
@@ -123,28 +121,28 @@ public sealed class BinderSystem : UpdateSystem {
                     case TextMeshProUGUI _:
                         ref var tmpc = ref sourceEntity.GetComponent<UpdateTextMeshProUGUIComponent>();
                         tmpc.value = dv.Wrapper.ToString();
-                        sourceEntity.AddComponent<UpdateMarker>();
+                        sourceEntity.SetComponent(new UpdateMarker());
                         break;
                     case Text _:
                         ref var tc = ref sourceEntity.GetComponent<UpdateTextComponent>();
                         tc.value = dv.Wrapper.ToString();
-                        sourceEntity.AddComponent<UpdateMarker>();
+                        sourceEntity.SetComponent(new UpdateMarker());
                         break;
                     case Slider _:
                         ref var sc = ref sourceEntity.GetComponent<UpdateSliderComponent>();
                         sc.value = GetLastFloatValue(source);
-                        sourceEntity.AddComponent<UpdateMarker>();
+                        sourceEntity.SetComponent(new UpdateMarker());
                         break;
                     case Image _:
                         if (source is GlobalVariableObject) {
                             ref var ic = ref sourceEntity.GetComponent<UpdateImageComponent>();
                             ic.value = GetLastSpriteValue(source);
-                            sourceEntity.AddComponent<UpdateMarker>();
+                            sourceEntity.SetComponent(new UpdateMarker());
                         }
                         else {
                             ref var ifac = ref sourceEntity.GetComponent<UpdateImageFillAmountComponent>();
                             ifac.value = GetLastFloatValue(source);
-                            sourceEntity.AddComponent<UpdateMarker>();
+                            sourceEntity.SetComponent(new UpdateMarker());
                         }
 
                         break;
@@ -152,7 +150,6 @@ public sealed class BinderSystem : UpdateSystem {
                         throw new ArgumentOutOfRangeException(nameof(target));
                 }
             }
-            
             
             entity.AddComponent<BinderInitializedMarker>();
         }
@@ -165,7 +162,7 @@ public sealed class BinderSystem : UpdateSystem {
             ref var tmp = ref tmpBag.GetComponent(i);
 
             tmp.value = ts.LastToString();
-            this.filterTMP.GetEntity(i).AddComponent<UpdateMarker>();
+            this.filterTMP.GetEntity(i).SetComponent(new UpdateMarker());
         }
         
         toStringBag = this.filterText.Select<GlobalEventLastToString>();
@@ -176,7 +173,7 @@ public sealed class BinderSystem : UpdateSystem {
             ref var tmp = ref textBag.GetComponent(i);
 
             tmp.value = ts.LastToString();
-            this.filterText.GetEntity(i).AddComponent<UpdateMarker>();
+            this.filterText.GetEntity(i).SetComponent(new UpdateMarker());
         }
         
         toStringBag = this.filterSlider.Select<GlobalEventLastToString>();
@@ -187,7 +184,7 @@ public sealed class BinderSystem : UpdateSystem {
             ref var tmp = ref sliderBag.GetComponent(i);
 
             tmp.value = float.Parse(ts.LastToString(), CultureInfo.InvariantCulture);
-            this.filterSlider.GetEntity(i).AddComponent<UpdateMarker>();
+            this.filterSlider.GetEntity(i).SetComponent(new UpdateMarker());
         }
         
         toStringBag = this.filterImageFillAmount.Select<GlobalEventLastToString>();
@@ -199,7 +196,7 @@ public sealed class BinderSystem : UpdateSystem {
 
             tmp.value = float.Parse(ts.LastToString(), CultureInfo.InvariantCulture);
             
-            this.filterImageFillAmount.GetEntity(i).AddComponent<UpdateMarker>();
+            this.filterImageFillAmount.GetEntity(i).SetComponent(new UpdateMarker());
         }
         
         var spriteBag = this.filterImage.Select<GlobalEventComponent<Object>>();
@@ -210,7 +207,7 @@ public sealed class BinderSystem : UpdateSystem {
             ref var tmp = ref imageSpriteBag.GetComponent(i);
 
             tmp.value = (Sprite)sprite.Data.Peek();
-            this.filterImage.GetEntity(i).AddComponent<UpdateMarker>();
+            this.filterImage.GetEntity(i).SetComponent(new UpdateMarker());
         }
     }
 }
