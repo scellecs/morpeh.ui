@@ -5,6 +5,7 @@ using Morpeh;
 using Morpeh.Globals;
 using Morpeh.Globals.ECS;
 using Morpeh.UI.Components;
+using Morpeh.UI.Components.UpdateComponents;
 using TMPro;
 using Unity.IL2CPP.CompilerServices;
 using UnityEngine;
@@ -28,11 +29,11 @@ public sealed class BinderSystem : UpdateSystem {
     public override void OnAwake() {
         this.filterInitialization = this.World.Filter.With<BinderComponent>().Without<BinderInitializedMarker>();
         
-        this.filterTMP = this.World.Filter.With<GlobalEventMarker>().With<BinderTextMeshProComponent>().With<GlobalEventPublished>();
-        this.filterText = this.World.Filter.With<GlobalEventMarker>().With<BinderTextComponent>().With<GlobalEventPublished>();
-        this.filterImage = this.World.Filter.With<GlobalEventMarker>().With<BinderImageComponent>().With<GlobalEventPublished>();
-        this.filterImageFillAmount = this.World.Filter.With<GlobalEventMarker>().With<BinderImageFillAmountComponent>().With<GlobalEventPublished>();
-        this.filterSlider = this.World.Filter.With<GlobalEventMarker>().With<BinderSliderComponent>().With<GlobalEventPublished>();
+        this.filterTMP = this.World.Filter.With<GlobalEventMarker>().With<UpdateTextMeshProUGUIComponent>().With<GlobalEventPublished>();
+        this.filterText = this.World.Filter.With<GlobalEventMarker>().With<UpdateTextComponent>().With<GlobalEventPublished>();
+        this.filterImage = this.World.Filter.With<GlobalEventMarker>().With<UpdateImageComponent>().With<GlobalEventPublished>();
+        this.filterImageFillAmount = this.World.Filter.With<GlobalEventMarker>().With<UpdateImageFillAmountComponent>().With<GlobalEventPublished>();
+        this.filterSlider = this.World.Filter.With<GlobalEventMarker>().With<UpdateSliderComponent>().With<GlobalEventPublished>();
     }
 
     public override void OnUpdate(float deltaTime) {
@@ -62,77 +63,54 @@ public sealed class BinderSystem : UpdateSystem {
             var source = binder.source;
             var target = binder.target;
             
-            if (source is IDataVariable dv) {
-                switch (target) {
-                    case TextMeshProUGUI textTMP:
-                        textTMP.text = dv.Wrapper.ToString();
-                        break;
-                    case Text simpleText:
-                        simpleText.text = dv.Wrapper.ToString();
-                        break;
-                    case Slider slider:
-                        slider.value = GetLastFloatValue(source);
-                        break;
-                    case Image image:
-                        if (source is GlobalVariableObject) {
-                            image.sprite = GetLastSpriteValue(source);
-                        }
-                        else {
-                            image.fillAmount = GetLastFloatValue(source);
-                        }
-
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(target));
-                }
-            }
+            
 
             var sourceEntity = binder.source.Entity;
             switch (target) {
                 case TextMeshProUGUI textTMP:
-                    ref var tmpc = ref sourceEntity.GetComponent<BinderTextMeshProComponent>(out var hasTMP);
+                    ref var tmpc = ref sourceEntity.GetComponent<UpdateTextMeshProUGUIComponent>(out var hasTMP);
                     if (hasTMP) {
-                        tmpc.values.Add(textTMP);
+                        tmpc.tmps.Add(textTMP);
                     }
                     else {
-                        sourceEntity.SetComponent(new BinderTextMeshProComponent{ values = new List<TextMeshProUGUI>{textTMP} });
+                        sourceEntity.SetComponent(new UpdateTextMeshProUGUIComponent{ tmps = new List<TextMeshProUGUI>{textTMP} });
                     }
                     break;
                 case Text simpleText:
-                    ref var tc = ref sourceEntity.GetComponent<BinderTextComponent>(out var hasT);
+                    ref var tc = ref sourceEntity.GetComponent<UpdateTextComponent>(out var hasT);
                     if (hasT) {
-                        tc.values.Add(simpleText);
+                        tc.texts.Add(simpleText);
                     }
                     else {
-                        sourceEntity.SetComponent(new BinderTextComponent{ values = new List<Text>{simpleText} });
+                        sourceEntity.SetComponent(new UpdateTextComponent{ texts = new List<Text>{simpleText} });
                     }
                     break;
                 case Slider slider:
-                    ref var sc = ref sourceEntity.GetComponent<BinderSliderComponent>(out var hasS);
+                    ref var sc = ref sourceEntity.GetComponent<UpdateSliderComponent>(out var hasS);
                     if (hasS) {
-                        sc.values.Add(slider);
+                        sc.sliders.Add(slider);
                     }
                     else {
-                        sourceEntity.SetComponent(new BinderSliderComponent{ values = new List<Slider>{slider} });
+                        sourceEntity.SetComponent(new UpdateSliderComponent{ sliders = new List<Slider>{slider} });
                     }
                     break;
                 case Image image:
                     if (source is GlobalVariableObject) {
-                        ref var ic = ref sourceEntity.GetComponent<BinderImageComponent>(out var hasI);
+                        ref var ic = ref sourceEntity.GetComponent<UpdateImageComponent>(out var hasI);
                         if (hasI) {
-                            ic.values.Add(image);
+                            ic.images.Add(image);
                         }
                         else {
-                            sourceEntity.SetComponent(new BinderImageComponent{ values = new List<Image>{image} });
+                            sourceEntity.SetComponent(new UpdateImageComponent{ images = new List<Image>{image} });
                         }
                     }
                     else {
-                        ref var ic = ref sourceEntity.GetComponent<BinderImageFillAmountComponent>(out var hasI);
+                        ref var ic = ref sourceEntity.GetComponent<UpdateImageFillAmountComponent>(out var hasI);
                         if (hasI) {
-                            ic.values.Add(image);
+                            ic.images.Add(image);
                         }
                         else {
-                            sourceEntity.SetComponent(new BinderImageFillAmountComponent{ values = new List<Image>{image} });
+                            sourceEntity.SetComponent(new UpdateImageFillAmountComponent{ images = new List<Image>{image} });
                         }
                     }
                     break;
@@ -140,73 +118,99 @@ public sealed class BinderSystem : UpdateSystem {
                     throw new ArgumentOutOfRangeException(nameof(target));
             }
             
+            if (source is IDataVariable dv) {
+                switch (target) {
+                    case TextMeshProUGUI _:
+                        ref var tmpc = ref sourceEntity.GetComponent<UpdateTextMeshProUGUIComponent>();
+                        tmpc.value = dv.Wrapper.ToString();
+                        sourceEntity.AddComponent<UpdateMarker>();
+                        break;
+                    case Text _:
+                        ref var tc = ref sourceEntity.GetComponent<UpdateTextComponent>();
+                        tc.value = dv.Wrapper.ToString();
+                        sourceEntity.AddComponent<UpdateMarker>();
+                        break;
+                    case Slider _:
+                        ref var sc = ref sourceEntity.GetComponent<UpdateSliderComponent>();
+                        sc.value = GetLastFloatValue(source);
+                        sourceEntity.AddComponent<UpdateMarker>();
+                        break;
+                    case Image _:
+                        if (source is GlobalVariableObject) {
+                            ref var ic = ref sourceEntity.GetComponent<UpdateImageComponent>();
+                            ic.value = GetLastSpriteValue(source);
+                            sourceEntity.AddComponent<UpdateMarker>();
+                        }
+                        else {
+                            ref var ifac = ref sourceEntity.GetComponent<UpdateImageFillAmountComponent>();
+                            ifac.value = GetLastFloatValue(source);
+                            sourceEntity.AddComponent<UpdateMarker>();
+                        }
+
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(target));
+                }
+            }
+            
             
             entity.AddComponent<BinderInitializedMarker>();
         }
 
         var toStringBag = this.filterTMP.Select<GlobalEventLastToString>();
-        var tmpBag = this.filterTMP.Select<BinderTextMeshProComponent>();
+        var tmpBag = this.filterTMP.Select<UpdateTextMeshProUGUIComponent>();
 
         for (int i = 0, length = this.filterTMP.Length; i < length; i++) {
             ref var ts = ref toStringBag.GetComponent(i);
             ref var tmp = ref tmpBag.GetComponent(i);
 
-            var str = ts.LastToString();
-            foreach (var t in tmp.values) {
-                t.text = str;
-            }
+            tmp.value = ts.LastToString();
+            this.filterTMP.GetEntity(i).AddComponent<UpdateMarker>();
         }
         
         toStringBag = this.filterText.Select<GlobalEventLastToString>();
-        var textBag = this.filterText.Select<BinderTextComponent>();
+        var textBag = this.filterText.Select<UpdateTextComponent>();
 
         for (int i = 0, length = this.filterText.Length; i < length; i++) {
             ref var ts  = ref toStringBag.GetComponent(i);
             ref var tmp = ref textBag.GetComponent(i);
 
-            var str = ts.LastToString();
-            foreach (var t in tmp.values) {
-                t.text = str;
-            }
+            tmp.value = ts.LastToString();
+            this.filterText.GetEntity(i).AddComponent<UpdateMarker>();
         }
         
         toStringBag = this.filterSlider.Select<GlobalEventLastToString>();
-        var sliderBag      = this.filterSlider.Select<BinderSliderComponent>();
+        var sliderBag      = this.filterSlider.Select<UpdateSliderComponent>();
 
         for (int i = 0, length = this.filterSlider.Length; i < length; i++) {
             ref var ts  = ref toStringBag.GetComponent(i);
             ref var tmp = ref sliderBag.GetComponent(i);
 
-            var str = float.Parse(ts.LastToString(), CultureInfo.InvariantCulture);
-            foreach (var t in tmp.values) {
-                t.value = str;
-            }
+            tmp.value = float.Parse(ts.LastToString(), CultureInfo.InvariantCulture);
+            this.filterSlider.GetEntity(i).AddComponent<UpdateMarker>();
         }
         
         toStringBag = this.filterImageFillAmount.Select<GlobalEventLastToString>();
-        var imageBag = this.filterImageFillAmount.Select<BinderImageFillAmountComponent>();
+        var imageBag = this.filterImageFillAmount.Select<UpdateImageFillAmountComponent>();
 
         for (int i = 0, length = this.filterImageFillAmount.Length; i < length; i++) {
             ref var ts  = ref toStringBag.GetComponent(i);
             ref var tmp = ref imageBag.GetComponent(i);
 
-            var str = float.Parse(ts.LastToString(), CultureInfo.InvariantCulture);
-            foreach (var t in tmp.values) {
-                t.fillAmount = str;
-            }
+            tmp.value = float.Parse(ts.LastToString(), CultureInfo.InvariantCulture);
+            
+            this.filterImageFillAmount.GetEntity(i).AddComponent<UpdateMarker>();
         }
         
         var spriteBag = this.filterImage.Select<GlobalEventComponent<Object>>();
-        var imageSpriteBag = this.filterImage.Select<BinderImageComponent>();
+        var imageSpriteBag = this.filterImage.Select<UpdateImageComponent>();
 
         for (int i = 0, length = this.filterImage.Length; i < length; i++) {
             ref var sprite  = ref spriteBag.GetComponent(i);
             ref var tmp = ref imageSpriteBag.GetComponent(i);
 
-            var sprt = (Sprite)sprite.Data.Peek();
-            foreach (var t in tmp.values) {
-                t.sprite = sprt;
-            }
+            tmp.value = (Sprite)sprite.Data.Peek();
+            this.filterImage.GetEntity(i).AddComponent<UpdateMarker>();
         }
     }
 }
