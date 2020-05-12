@@ -25,5 +25,8 @@
         [Header("Events")]
         public GlobalEvent openEvent;
         public GlobalEvent closeEvent;
+
+        [HideInInspector]
+        public GraphicRaycaster raycaster;
     }
 }
