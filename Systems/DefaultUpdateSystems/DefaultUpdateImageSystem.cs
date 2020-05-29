@@ -1,5 +1,5 @@
-﻿namespace Morpeh.UI {
-    using Morpeh.UI.Components;
+﻿namespace Morpeh.UI.Systems.DefaultUpdateSystems {
+    using Components.UpdateComponents;
     using Unity.IL2CPP.CompilerServices;
     using UnityEngine;
 
@@ -11,15 +11,18 @@
         private Filter filter;
 
         public override void OnAwake() {
-            this.filter = this.World.Filter.With<UpdateImageComponent>();
+            this.filter = this.World.Filter.With<UpdateImageComponent>().With<UpdateMarker>();
         }
 
         public override void OnUpdate(float deltaTime) {
             foreach (var entity in this.filter)
             {
                 ref var component = ref entity.GetComponent<UpdateImageComponent>();
-                component.image.sprite = component.value;
-                entity.RemoveComponent<UpdateImageComponent>();
+                foreach (var image in component.images) {
+                    image.sprite = component.value;
+                }
+                
+                entity.RemoveComponent<UpdateMarker>();
             }
         }
     }

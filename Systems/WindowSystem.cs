@@ -1,4 +1,5 @@
 ﻿using Morpeh;
+using Morpeh.UI.Components;
 using UnityEngine;
 using Unity.IL2CPP.CompilerServices;
 
@@ -22,11 +23,17 @@ public sealed class WindowSystem : UpdateSystem {
                 w.canvasGroup.alpha        = 1f;
                 w.canvasGroup.interactable = true;
                 w.canvasGroup.blocksRaycasts = true;
+                if (w.raycaster != null) {
+                    w.raycaster.enabled = true;
+                }
             }
             else if (w.closeEvent) {
                 w.canvasGroup.alpha = 0f;
                 w.canvasGroup.interactable = false;
                 w.canvasGroup.blocksRaycasts = false;
+                if (w.raycaster != null) {
+                    w.raycaster.enabled = false;
+                }
             }
         }
     }

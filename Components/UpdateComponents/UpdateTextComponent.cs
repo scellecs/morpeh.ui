@@ -1,4 +1,5 @@
-﻿namespace Morpeh.UI.Components {
+﻿namespace Morpeh.UI.Components.UpdateComponents {
+    using System.Collections.Generic;
     using Unity.IL2CPP.CompilerServices;
     using UnityEngine.UI;
 
@@ -7,7 +8,7 @@
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
     [System.Serializable]
     public struct UpdateTextComponent : IComponent {
-        public Text text;
         public string value;
+        public List<Text> texts;
     }
 }
