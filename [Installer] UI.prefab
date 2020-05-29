@@ -50,5 +50,15 @@ MonoBehaviour:
     system: {fileID: 11400000, guid: 59c7d5c9d89cada4e9e83e41a6ef4f38, type: 2}
   - enabled: 1
     system: {fileID: 11400000, guid: 504bdd271a791b34383929d949854352, type: 2}
+  - enabled: 1
+    system: {fileID: 11400000, guid: d07aa4f02492aa846b0d80a2b6f81c47, type: 2}
+  - enabled: 1
+    system: {fileID: 11400000, guid: 216dbd0629a7aa842bc71d5ebd3a449f, type: 2}
+  - enabled: 1
+    system: {fileID: 11400000, guid: 2c730a960218e1d479184ccd04cc7780, type: 2}
+  - enabled: 1
+    system: {fileID: 11400000, guid: 56d9dd19ad6843c4a93749f41835eece, type: 2}
+  - enabled: 1
+    system: {fileID: 11400000, guid: 9e871ed552c8a5c4d8f4b4319620bc9b, type: 2}
   fixedUpdateSystems: []
   lateUpdateSystems: []
