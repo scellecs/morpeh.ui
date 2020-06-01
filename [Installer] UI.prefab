@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f3e5db895821594790574b8473edacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  order: -1
+  order: 1000
   initializers: []
   updateSystems:
   - enabled: 1
