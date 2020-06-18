@@ -43,6 +43,9 @@ public sealed class WindowSystem : UpdateSystem {
                     var opened = this.openedFullScreenWindow.First();
                     opened.RemoveComponent<OpenedFullScreenWindowMarker>();
                     this.SetActive(ref opened.GetComponent<WindowComponent>(), false);
+                    
+                    entity.SetComponent(new OpenedFullScreenWindowMarker());
+                    this.SetActive(ref w, true);
                 }
                 else if (!entity.Has<ForceCloseOthersFullScreenComponent>() && this.openedFullScreenWindow.Length != 0)
                 {
