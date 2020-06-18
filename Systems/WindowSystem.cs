@@ -18,7 +18,7 @@ public sealed class WindowSystem : UpdateSystem {
     public override void OnAwake() {
         this.windows = this.World.Filter.With<WindowComponent>().Without<FullScreenWindowComponent>();
         this.fullScreenWindows = this.World.Filter.With<WindowComponent>().With<FullScreenWindowComponent>();
-        this.openedFullScreenWindow = this.World.Filter.With<WindowComponent>().Without<FullScreenWindowComponent>()
+        this.openedFullScreenWindow = this.World.Filter.With<WindowComponent>().With<FullScreenWindowComponent>()
             .With<OpenedFullScreenWindowMarker>();
     }
 

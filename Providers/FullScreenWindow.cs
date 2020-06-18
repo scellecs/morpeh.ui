@@ -7,6 +7,6 @@
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
     [HideMonoScript]
-    public sealed class FullScreenWindow : MonoProvider<ForceCloseOthersFullScreenComponent> {
+    public sealed class FullScreenWindow : MonoProvider<FullScreenWindowComponent> {
     }
 }
