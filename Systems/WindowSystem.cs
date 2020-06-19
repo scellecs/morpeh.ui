@@ -92,6 +92,15 @@ public sealed class WindowSystem : UpdateSystem {
         if (value)
         {
             entity.SetComponent(new OpenedFullScreenWindowMarker());
+            if (entity.Has<EventsToPublishOnWindowShowComponent>())
+            {
+                ref var component = ref entity.GetComponent<EventsToPublishOnWindowShowComponent>();
+
+                foreach (var @event in component.events)
+                {
+                    @event.NextFrame();
+                }
+            }
         }
         else
         {
