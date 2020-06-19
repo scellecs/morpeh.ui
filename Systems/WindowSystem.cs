@@ -1,4 +1,5 @@
-﻿using Morpeh;
+﻿using System.Collections.Generic;
+using Morpeh;
 using Morpeh.UI;
 using Morpeh.UI.Components;
 using UnityEngine;
@@ -14,12 +15,17 @@ public sealed class WindowSystem : UpdateSystem {
     private Filter windows;
     private Filter fullScreenWindows;
     private Filter openedFullScreenWindow;
+
+    //ToDo: move to separate Entity ???
+    private Queue<IEntity> openingQueue;
     
     public override void OnAwake() {
         this.windows = this.World.Filter.With<WindowComponent>().Without<FullScreenWindowComponent>();
         this.fullScreenWindows = this.World.Filter.With<WindowComponent>().With<FullScreenWindowComponent>();
         this.openedFullScreenWindow = this.World.Filter.With<WindowComponent>().With<FullScreenWindowComponent>()
             .With<OpenedFullScreenWindowMarker>();
+        
+        this.openingQueue = new Queue<IEntity>();
     }
 
     public override void OnUpdate(float deltaTime) {
@@ -43,28 +49,40 @@ public sealed class WindowSystem : UpdateSystem {
                     var opened = this.openedFullScreenWindow.First();
                     opened.RemoveComponent<OpenedFullScreenWindowMarker>();
                     this.SetActive(ref opened.GetComponent<WindowComponent>(), false);
-                    
-                    entity.SetComponent(new OpenedFullScreenWindowMarker());
-                    this.SetActive(ref w, true);
+
+                    this.SetActiveFullScreen(entity, ref w, true);
                 }
                 else if (!entity.Has<ForceCloseOthersFullScreenComponent>() && this.openedFullScreenWindow.Length != 0)
                 {
-                    //ToDo: add to queue
+                    this.openingQueue.Enqueue(entity);
                 }
                 else if (!entity.Has<ForceCloseOthersFullScreenComponent>() && this.openedFullScreenWindow.Length == 0)
                 {
-                    entity.SetComponent(new OpenedFullScreenWindowMarker());
-                    this.SetActive(ref w, true);
+                    this.SetActiveFullScreen(entity, ref w, true);
                 }
             }
             else if (w.closeEvent)
             {
-                entity.RemoveComponent<OpenedFullScreenWindowMarker>();
-                this.SetActive(ref w, false);
-                
-                //ToDo: check queue and show first
+                this.SetActiveFullScreen(entity, ref w, false);
+
+                var entityFromQueue = this.openingQueue.Dequeue();
+                ref var windowFromQueue = ref entityFromQueue.GetComponent<WindowComponent>();
+                this.SetActiveFullScreen(entityFromQueue, ref windowFromQueue, true);
             }
         }
+    }
+
+    private void SetActiveFullScreen(IEntity entity, ref WindowComponent w, bool value) {
+        if (value)
+        {
+            entity.SetComponent(new OpenedFullScreenWindowMarker());
+        }
+        else
+        {
+            entity.RemoveComponent<OpenedFullScreenWindowMarker>();
+        }
+
+        this.SetActive(ref w, value);
     }
 
     private void SetActive(ref WindowComponent w, bool value) {
