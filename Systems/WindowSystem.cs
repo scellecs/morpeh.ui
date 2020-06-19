@@ -15,6 +15,7 @@ public sealed class WindowSystem : UpdateSystem {
     private Filter windows;
     private Filter fullScreenWindows;
     private Filter openedFullScreenWindow;
+    private Filter denyShowFullScreenWindows;
 
     //ToDo: move to separate Entity ???
     private Queue<IEntity> openingQueue;
@@ -24,6 +25,7 @@ public sealed class WindowSystem : UpdateSystem {
         this.fullScreenWindows = this.World.Filter.With<WindowComponent>().With<FullScreenWindowComponent>();
         this.openedFullScreenWindow = this.World.Filter.With<WindowComponent>().With<FullScreenWindowComponent>()
             .With<OpenedFullScreenWindowMarker>();
+        this.denyShowFullScreenWindows = this.World.Filter.With<DenyShowFullScreenWindowsComponent>();
         
         this.openingQueue = new Queue<IEntity>();
     }
@@ -38,6 +40,17 @@ public sealed class WindowSystem : UpdateSystem {
             {
                 this.SetActive(ref w, false);
             }
+        }
+
+        if (this.denyShowFullScreenWindows.Length != 0)
+        {
+            foreach (var entity in this.fullScreenWindows)
+            {
+                if(!this.openingQueue.Contains(entity))
+                    this.openingQueue.Enqueue(entity);
+            }
+            
+            return;
         }
 
         foreach (var entity in this.fullScreenWindows)
@@ -65,9 +78,12 @@ public sealed class WindowSystem : UpdateSystem {
             {
                 this.SetActiveFullScreen(entity, ref w, false);
 
-                var entityFromQueue = this.openingQueue.Dequeue();
-                ref var windowFromQueue = ref entityFromQueue.GetComponent<WindowComponent>();
-                this.SetActiveFullScreen(entityFromQueue, ref windowFromQueue, true);
+                if (this.openingQueue.Count != 0)
+                {
+                    var entityFromQueue = this.openingQueue.Dequeue();
+                    ref var windowFromQueue = ref entityFromQueue.GetComponent<WindowComponent>();
+                    this.SetActiveFullScreen(entityFromQueue, ref windowFromQueue, true);
+                }
             }
         }
     }
