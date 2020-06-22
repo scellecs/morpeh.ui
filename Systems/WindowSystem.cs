@@ -21,11 +21,11 @@ public sealed class WindowSystem : UpdateSystem {
     private Queue<IEntity> openingQueue;
     
     public override void OnAwake() {
-        this.windows = this.World.Filter.With<WindowComponent>().Without<FullScreenWindowComponent>();
-        this.fullScreenWindows = this.World.Filter.With<WindowComponent>().With<FullScreenWindowComponent>();
-        this.openedFullScreenWindow = this.World.Filter.With<WindowComponent>().With<FullScreenWindowComponent>()
-            .With<OpenedFullScreenWindowMarker>();
-        this.denyShowFullScreenWindows = this.World.Filter.With<DenyShowFullScreenWindowsComponent>();
+        this.windows = this.World.Filter.With<WindowComponent>().Without<ModalWindowComponent>();
+        this.fullScreenWindows = this.World.Filter.With<WindowComponent>().With<ModalWindowComponent>();
+        this.openedFullScreenWindow = this.World.Filter.With<WindowComponent>().With<ModalWindowComponent>()
+            .With<OpenedModalWindowMarker>();
+        this.denyShowFullScreenWindows = this.World.Filter.With<DenyShowModalWindowsComponent>();
         
         this.openingQueue = new Queue<IEntity>();
     }
@@ -57,22 +57,22 @@ public sealed class WindowSystem : UpdateSystem {
         {
             ref var w = ref entity.GetComponent<WindowComponent>();
             if (w.openEvent) {
-                if (entity.Has<ForceCloseOthersFullScreenComponent>())
+                if (entity.Has<ForceCloseOthersModalsComponent>())
                 {
                     if (this.openedFullScreenWindow.Length != 0)
                     {
                         var opened = this.openedFullScreenWindow.First();
-                        opened.RemoveComponent<OpenedFullScreenWindowMarker>();
+                        opened.RemoveComponent<OpenedModalWindowMarker>();
                         this.SetActive(ref opened.GetComponent<WindowComponent>(), false);
                     }
 
                     this.SetActiveFullScreen(entity, ref w, true);
                 }
-                else if (!entity.Has<ForceCloseOthersFullScreenComponent>() && this.openedFullScreenWindow.Length != 0)
+                else if (!entity.Has<ForceCloseOthersModalsComponent>() && this.openedFullScreenWindow.Length != 0)
                 {
                     this.openingQueue.Enqueue(entity);
                 }
-                else if (!entity.Has<ForceCloseOthersFullScreenComponent>() && this.openedFullScreenWindow.Length == 0)
+                else if (!entity.Has<ForceCloseOthersModalsComponent>() && this.openedFullScreenWindow.Length == 0)
                 {
                     this.SetActiveFullScreen(entity, ref w, true);
                 }
@@ -94,7 +94,7 @@ public sealed class WindowSystem : UpdateSystem {
     private void SetActiveFullScreen(IEntity entity, ref WindowComponent w, bool value) {
         if (value)
         {
-            entity.SetComponent(new OpenedFullScreenWindowMarker());
+            entity.SetComponent(new OpenedModalWindowMarker());
             if (entity.Has<EventsToPublishOnWindowShowComponent>())
             {
                 ref var component = ref entity.GetComponent<EventsToPublishOnWindowShowComponent>();
@@ -107,7 +107,7 @@ public sealed class WindowSystem : UpdateSystem {
         }
         else
         {
-            entity.RemoveComponent<OpenedFullScreenWindowMarker>();
+            entity.RemoveComponent<OpenedModalWindowMarker>();
         }
 
         this.SetActive(ref w, value);

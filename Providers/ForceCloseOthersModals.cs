@@ -1,11 +1,12 @@
 ﻿namespace Morpeh.UI {
     using Morpeh;
+    using Sirenix.OdinInspector;
     using Unity.IL2CPP.CompilerServices;
 
     [Il2CppSetOption(Option.NullChecks, false)]
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
-    [System.Serializable]
-    public struct OpenedFullScreenWindowMarker : IComponent {
+    [HideMonoScript]
+    public sealed class ForceCloseOthersModals : MonoProvider<ForceCloseOthersModalsComponent> {
     }
 }

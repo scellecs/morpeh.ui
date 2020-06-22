@@ -6,6 +6,6 @@
     [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
     [Il2CppSetOption(Option.DivideByZeroChecks, false)]
     [System.Serializable]
-    public struct ForceCloseOthersFullScreenComponent : IComponent {
+    public struct OpenedModalWindowMarker : IComponent {
     }
 }
