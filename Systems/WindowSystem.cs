@@ -18,7 +18,7 @@ public sealed class WindowSystem : UpdateSystem {
     private Filter denyShowFullScreenWindows;
 
     //ToDo: move to separate Entity ???
-    private Queue<IEntity> openingQueue;
+    private Queue<Entity> openingQueue;
     
     public override void OnAwake() {
         this.windows = this.World.Filter.With<WindowComponent>().Without<ModalWindowComponent>();
@@ -27,7 +27,7 @@ public sealed class WindowSystem : UpdateSystem {
             .With<OpenedModalWindowMarker>();
         this.denyShowFullScreenWindows = this.World.Filter.With<DenyShowModalWindowsComponent>();
         
-        this.openingQueue = new Queue<IEntity>();
+        this.openingQueue = new Queue<Entity>();
     }
 
     public override void OnUpdate(float deltaTime) {
@@ -91,7 +91,7 @@ public sealed class WindowSystem : UpdateSystem {
         }
     }
 
-    private void SetActiveFullScreen(IEntity entity, ref WindowComponent w, bool value) {
+    private void SetActiveFullScreen(Entity entity, ref WindowComponent w, bool value) {
         if (value)
         {
             entity.SetComponent(new OpenedModalWindowMarker());
