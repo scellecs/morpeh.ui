@@ -63,6 +63,10 @@ public sealed class BinderSystem : UpdateSystem {
             var source = binder.source;
             var target = binder.target;
             
+            if (source == null || target == null) {
+                continue;
+            }
+            
             var sourceEntity = binder.source.Entity;
             switch (target) {
                 case TextMeshProUGUI textTMP:

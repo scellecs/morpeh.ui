@@ -4,7 +4,7 @@
   "displayName": "Morpeh.UI",
   "description": "UI Framework for Morpeh ECS",
   "unity": "2019.1",
-  "version": "2020.2.0",
+  "version": "2020.2.1",
   "keywords": [
     "morpeh",
     "ecs",
